@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ExpenseTracker.Core.Domain.Entities;
+using ExpenseTracker.Infrastructure.API.EFConfiguration;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +19,17 @@ namespace ExpenseTracker.Infrastructure.API
         {
         }
 
+        DbSet<Topic> Topics { get; set; }
+        DbSet<Expense> Expenses { get; set; }
+        DbSet<Wallet> Wallets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            var assembly = typeof(ExpenseConfiguration).Assembly;
+
+            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
         }
     }
 }
