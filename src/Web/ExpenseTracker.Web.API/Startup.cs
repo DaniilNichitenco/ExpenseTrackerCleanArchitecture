@@ -37,6 +37,7 @@ namespace ExpenseTracker.Web.API
             {
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ExpenseTrackerConnection"));
+                options.UseLazyLoadingProxies();
             });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
