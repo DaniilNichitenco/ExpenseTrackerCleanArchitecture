@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "ExpenseTracker.Infrastructure.IdentityServer/1.0.0": {
+        "runtime": {
+          "ExpenseTracker.Infrastructure.IdentityServer.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ExpenseTracker.Infrastructure.IdentityServer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
