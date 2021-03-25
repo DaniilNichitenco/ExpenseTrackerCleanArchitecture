@@ -13,7 +13,21 @@ namespace ExpenseTracker.Infrastructure.API.EFConfiguration
     {
         public void Configure(EntityTypeBuilder<Wallet> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(p => p.Bill)
+                .IsRequired();
+
+            builder.Property(p => p.CurrencyCode)
+                .IsRequired()
+                .HasMaxLength(3)
+                .HasColumnType("char(3)");
+
+            builder.Property(p => p.RowVersion)
+                .IsRowVersion();
+
+            builder.HasMany(p => p.Expenses)
+                .WithOne(e => e.Wallet)
+                .HasForeignKey(e => e.WalletId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
