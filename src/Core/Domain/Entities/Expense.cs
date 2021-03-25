@@ -8,9 +8,9 @@ namespace ExpenseTracker.Core.Domain.Entities
 {
     public class Expense : BaseEntity
     {
-        public int WalletId { get; set; }
+        public long WalletId { get; set; }
         public virtual Wallet Wallet { get; set; }
-        public int TopicId { get; set; }
+        public long? TopicId { get; set; }
         public virtual Topic Topic { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;

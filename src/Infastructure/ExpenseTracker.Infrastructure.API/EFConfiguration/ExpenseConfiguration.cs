@@ -13,7 +13,16 @@ namespace ExpenseTracker.Infrastructure.API.EFConfiguration
     {
         public void Configure(EntityTypeBuilder<Expense> builder)
         {
-            throw new NotImplementedException();
+            builder.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(40);
+
+            builder.Property(p => p.Date)
+                .IsRequired();
+
+            builder.Property(p => p.Money)
+                .HasDefaultValue(0)
+                .IsRequired();
         }
     }
 }
