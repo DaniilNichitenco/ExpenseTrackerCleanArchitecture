@@ -18,9 +18,9 @@ namespace ExpenseTracker.Infrastructure.API
             _context = context;
         }
 
-        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken) => await _context.Set<TEntity>().AddAsync(entity, cancellationToken);
+        public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default) => await _context.Set<TEntity>().AddAsync(entity, cancellationToken);
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken) => await _context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) => await _context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
 
         public void Delete(TEntity entity) => _context.Set<TEntity>().Remove(entity);
 
@@ -28,13 +28,15 @@ namespace ExpenseTracker.Infrastructure.API
 
         public TEntity GetById(long id) => _context.Set<TEntity>().SingleOrDefault(e => e.Id == id);
 
-        public async Task<TEntity> GetByIdAsync(long id, CancellationToken cancellationToken) => await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
+        public async Task<TEntity> GetByIdAsync(long id, CancellationToken cancellationToken = default) => await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id == id, cancellationToken);
 
         public List<TEntity> List() => _context.Set<TEntity>().ToList();
 
-        public async Task<List<TEntity>> ListAsync(CancellationToken cancellationToken) => await _context.Set<TEntity>().ToListAsync(cancellationToken);
+        public async Task<List<TEntity>> ListAsync(CancellationToken cancellationToken = default) => await _context.Set<TEntity>().ToListAsync(cancellationToken);
 
         public IQueryable<TEntity> Read() => _context.Set<TEntity>().OrderBy(e => e.Id);
+
+        public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
 
         public void Update(TEntity entity) => _context.Set<TEntity>().Update(entity);
 
