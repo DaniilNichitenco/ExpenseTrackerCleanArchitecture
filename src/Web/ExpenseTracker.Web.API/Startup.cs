@@ -117,6 +117,8 @@ namespace ExpenseTracker.Web.API
 
             app.UseRouting();
 
+            app.AddExceptionHandlerMiddleware();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
