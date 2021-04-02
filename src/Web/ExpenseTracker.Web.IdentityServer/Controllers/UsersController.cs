@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Core.Domain.Auth;
+using ExpenseTracker.Core.Domain.Exceptions;
 using ExpenseTracker.Core.Domain.UserDtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,8 +29,6 @@ namespace ExpenseTracker.Web.IdentityServer.Controllers
                 IsActive = true
             };
 
-            return Ok(new { user.UserName, userSignUpDto.Password });
-
             var result = await _userManager.CreateAsync(user, userSignUpDto.Password);
 
             if(result == IdentityResult.Success)
@@ -41,6 +40,35 @@ namespace ExpenseTracker.Web.IdentityServer.Controllers
             }
 
             return BadRequest(result.Errors);
+        }
+
+        [HttpGet("email/confirmation/request")]
+        public async Task<IActionResult> RequestEmailConfirmation([FromQuery] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                throw new BadRequestException("User with this email does not exist");
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action("EmailConfirmation", new { email = user.Email, token });
+
+            return Ok(confirmationLink);
+        }
+
+        [HttpGet("email/confirmation")]
+        public async Task<ActionResult<bool>> EmailConfirmation([FromQuery] string email, [FromQuery] string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                return Ok(false);
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            return Ok(result.Succeeded);
         }
     }
 }

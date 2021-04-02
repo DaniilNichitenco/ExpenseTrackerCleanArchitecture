@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
@@ -24,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Domain\ExpenseTracker.Core.Domain.csproj" />
     <ProjectReference Include="..\..\Infastructure\ExpenseTracker.Infrastructure.API\ExpenseTracker.Infrastructure.API.csproj" />
+    <ProjectReference Include="..\..\Infastructure\ExpenseTracker.Infrastructure.Shared\ExpenseTracker.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
 </Project>

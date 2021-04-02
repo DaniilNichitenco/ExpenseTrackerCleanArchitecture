@@ -3,6 +3,7 @@ using ExpenseTracker.Core.Domain.Schemas;
 using ExpenseTracker.Infrastructure.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,7 +41,8 @@ namespace ExpenseTracker.Web.IdentityServer
                 options.SignIn.RequireConfirmedEmail = true;
             })
                 .AddRoles<Role>()
-                .AddEntityFrameworkStores<IDbContext>();
+                .AddEntityFrameworkStores<IDbContext>()
+                .AddDefaultTokenProviders();
 
             var migrationsAssembly = typeof(IDbContext).GetTypeInfo().Assembly.GetName().Name;
 

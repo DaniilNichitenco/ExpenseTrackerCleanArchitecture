@@ -3,8 +3,10 @@ using ExpenseTracker.Infrastructure.API;
 using ExpenseTracker.Infrastructure.API.Authorization.Handlers;
 using ExpenseTracker.Infrastructure.API.Extensions;
 using ExpenseTracker.Infrastructure.IdentityServer.Extensions;
+using ExpenseTracker.Infrastructure.Shared;
 using IdentityModel.Client;
 using IdentityServer4.AccessTokenValidation;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -52,8 +55,18 @@ namespace ExpenseTracker.Web.API
                 options.AddAuthorizationPolicies();
             });
 
+            services.Configure<EmailSettings>(Configuration.GetSection(nameof(EmailSettings)))
+                //.AddScoped<IEmailSettings, EmailSettings>();
+                .AddScoped<IEmailSettings>(sp =>
+                sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
+
+            services.AddScoped<ISendingManager, SendingManager>();
+
+
             services.AddScoped(typeof(IEFRepository<>), typeof(EFRepository<>));
+            services.AddSingleton<ITagReplacer, MailTagReplacer>();
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
+            //services.AddSingleton<TelemetryClient>();
             services.AddSingleton<IDiscoveryCache>(s =>
             {
                 var factory = s.GetRequiredService<IHttpClientFactory>();
@@ -117,7 +130,7 @@ namespace ExpenseTracker.Web.API
 
             app.UseRouting();
 
-            app.AddExceptionHandlerMiddleware();
+            //app.AddExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();

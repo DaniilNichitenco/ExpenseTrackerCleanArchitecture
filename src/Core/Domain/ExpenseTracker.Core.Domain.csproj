@@ -10,4 +10,11 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="CommandHandlers\" />
+    <Folder Include="QueryHandlers\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
 </Project>
