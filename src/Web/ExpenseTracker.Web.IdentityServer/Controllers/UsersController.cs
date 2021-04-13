@@ -43,7 +43,7 @@ namespace ExpenseTracker.Web.IdentityServer.Controllers
         }
 
         [HttpGet("email/confirmation/request")]
-        public async Task<IActionResult> RequestEmailConfirmation([FromQuery] string email)
+        public async Task<IActionResult> RequestEmailConfirmation([FromQuery] string email, [FromQuery] string redirectTo)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if(user == null)
@@ -52,13 +52,13 @@ namespace ExpenseTracker.Web.IdentityServer.Controllers
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = Url.Action("EmailConfirmation", new { email = user.Email, token });
+            var confirmationLink = Url.Action("EmailConfirmation", new { email = user.Email, token, redirectTo });
 
             return Ok(confirmationLink);
         }
 
         [HttpGet("email/confirmation")]
-        public async Task<ActionResult<bool>> EmailConfirmation([FromQuery] string email, [FromQuery] string token)
+        public async Task<IActionResult> EmailConfirmation([FromQuery] string email, [FromQuery] string token, [FromQuery] string redirectTo)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if(user == null)
@@ -67,6 +67,11 @@ namespace ExpenseTracker.Web.IdentityServer.Controllers
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
+            {
+                return RedirectPermanent(redirectTo);
+            }
 
             return Ok(result.Succeeded);
         }

@@ -16,11 +16,13 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using static IdentityModel.OidcConstants;
 
 namespace ExpenseTracker.Web.API.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -57,7 +59,7 @@ namespace ExpenseTracker.Web.API.Controllers
                 throw new Exception("Something went wrong while connecting to the AuthServer Token Endpoint.");
             }
 
-            var tokenRespone = await _httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
+            var tokenResponse = await _httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest
             {
                 Address = endPointDiscovery.TokenEndpoint,
                 ClientId = _configuration["Self:Id"],
@@ -68,10 +70,12 @@ namespace ExpenseTracker.Web.API.Controllers
                 Password = userSignInDto.Password
             });
 
-            return Ok(new { access_token = tokenRespone.AccessToken, refresh_token = tokenRespone.RefreshToken, expires_in = tokenRespone.ExpiresIn });
+            return Ok(new { access_token = tokenResponse.AccessToken, refresh_token = tokenResponse.RefreshToken, expires_in = tokenResponse.ExpiresIn });
         }
 
         [AllowAnonymous]
+        [ProducesResponseType(typeof(UserSignInDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<IdentityError>), StatusCodes.Status400BadRequest)]
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] UserSignUpDto userSignUpDto)
         {
@@ -101,7 +105,7 @@ namespace ExpenseTracker.Web.API.Controllers
                 throw new Exception("Something went wrong while connecting to the AuthServer Token Endpoint.");
             }
 
-            var tokenRespone = await _httpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
+            var tokenResponse = await _httpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
                 Method = HttpMethod.Post,
                 Address = endPointDiscovery.TokenEndpoint,
@@ -111,16 +115,18 @@ namespace ExpenseTracker.Web.API.Controllers
                 RefreshToken = refreshToken
             });
 
-            return Ok(new { access_token = tokenRespone.AccessToken, refresh_token = tokenRespone.RefreshToken, expires_in = tokenRespone.ExpiresIn });
+            return Ok(new { access_token = tokenResponse.AccessToken, refresh_token = tokenResponse.RefreshToken, expires_in = tokenResponse.ExpiresIn });
         }
 
         [AllowAnonymous]
         [HttpGet("email/confirmation")]
-        public async Task<bool> RequestEmailConfirmation([FromQuery] string email, [FromQuery] string username)
+        public async Task<IActionResult> RequestEmailConfirmation([FromQuery] string email, [FromQuery] string username)
         {
-            var result = await _httpClient.GetAsync($"{_configuration["ApiResourceBaseUrls:AuthServer"]}/identity/users/email/confirmation/request?email={email}");
+            var result = await _httpClient
+                .GetAsync(
+                    $"{_configuration["ApiResourceBaseUrls:AuthServer"]}/identity/users/email/confirmation/request?email={email}&redirectTo=https://localhost:5002/swagger/");
 
-            if(result.StatusCode == HttpStatusCode.OK)
+            if (result.StatusCode == HttpStatusCode.OK)
             {
                 var content = await result.Content.ReadAsStringAsync();
                 try
@@ -136,16 +142,20 @@ namespace ExpenseTracker.Web.API.Controllers
                     var body = _tagReplacer.ReplaceTags(tagsText, text);
 
 
-                    return _sendingManager.SendMessage("Email confirmation", body, new List<MailAddress> { new MailAddress(email) });
+                    if (_sendingManager.SendMessage("Email confirmation", body,
+                        new List<MailAddress> {new MailAddress(email)}))
+                    {
+                        return Ok();
+                    }
                 }
                 catch(Exception exception)
                 {
                     _logger.LogError(exception.Message);
-                    return false;
+                    return BadRequest();
                 }
             }
 
-            return false;
+            return BadRequest();
         }
 
     }
