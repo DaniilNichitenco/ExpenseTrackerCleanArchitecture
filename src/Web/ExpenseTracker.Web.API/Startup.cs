@@ -21,6 +21,13 @@ using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Reflection;
+using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
+using ExpenseTracker.Core.Application.QueryHandlers;
+using ExpenseTracker.Core.Domain.AutoMapperProfiles;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ExpenseTracker.Web.API
 {
@@ -60,8 +67,11 @@ namespace ExpenseTracker.Web.API
                 .AddScoped<IEmailSettings>(sp =>
                 sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
 
+            services.AddHttpContextAccessor();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(ExpenseProfile).GetTypeInfo().Assembly);
             services.AddScoped<ISendingManager, SendingManager>();
 
+            services.AddMediatR(typeof(GetUserExpensesQueryHandler),typeof(GetUserExpensesQuery));
 
             services.AddScoped(typeof(IEFRepository<>), typeof(EFRepository<>));
             services.AddSingleton<ITagReplacer, MailTagReplacer>();
