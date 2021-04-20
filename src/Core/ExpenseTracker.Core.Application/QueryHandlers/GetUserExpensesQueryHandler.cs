@@ -27,14 +27,7 @@ namespace ExpenseTracker.Core.Application.QueryHandlers
         public async Task<IEnumerable<ExpenseDto>> Handle(GetUserExpensesQuery request,
             CancellationToken cancellationToken)
         {
-            var idClaim = request.User.Claims.FirstOrDefault(x => x.Type == "id");
-            if (idClaim == null)
-            {
-                return null;
-            }
-            
-            var id = long.Parse(idClaim.Value);
-            var expenses = await _expenseRepository.Read().Where(x => x.OwnerId == id).ToListAsync(cancellationToken: cancellationToken);
+            var expenses = await _expenseRepository.Read().Where(x => x.OwnerId == request.UserId).ToListAsync(cancellationToken: cancellationToken);
             var result = _mapper.Map<List<ExpenseDto>>(expenses);
         
             return result;

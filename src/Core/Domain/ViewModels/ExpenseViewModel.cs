@@ -4,6 +4,7 @@ namespace ExpenseTracker.Core.Domain.ViewModels
 {
     public class ExpenseViewModel
     {
+        public long Id { get; set; }
         public long WalletId { get; set; }
         public long? TopicId { get; set; }
         public string Title { get; set; }

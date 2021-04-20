@@ -8,8 +8,6 @@ namespace ExpenseTracker.Core.Application.Queries.ExpenseQueries
 {
     public class GetUserExpensesQuery : IRequest<IEnumerable<ExpenseDto>>
     {
-        public ClaimsPrincipal User { get; }
-
-        public GetUserExpensesQuery(ClaimsPrincipal user) => User = user;
+        public long UserId { get; set; }
     }
 }

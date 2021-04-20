@@ -34,7 +34,13 @@ namespace ExpenseTracker.Web.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExpenseViewModel>>> GetExpenses(CancellationToken cancellationToken)
         {
-            var expenses = await _mediator.Send(new GetUserExpensesQuery(User), cancellationToken);
+            var id = User.Claims.FirstOrDefault(x => x.Type == "id");
+            if (id == null)
+            {
+                return Forbid();
+            }
+            
+            var expenses = await _mediator.Send(new GetUserExpensesQuery { UserId = long.Parse(id.Value) }, cancellationToken);
             
             var result = _mapper.Map<IEnumerable<ExpenseViewModel>>(expenses);
             
