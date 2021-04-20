@@ -49,8 +49,8 @@ namespace ExpenseTracker.Web.API.Controllers
         }
 
         [Read]
-        [HttpGet]
-        public async Task<IActionResult> GetSumOfExpensesForDay(DateTime date, CancellationToken cancellationToken)
+        [HttpGet("sum/{date}")]
+        public async Task<IActionResult> GetSumOfExpensesForDay([FromRoute] DateTime date, CancellationToken cancellationToken)
         {
             var id = User.Claims.FirstOrDefault(x => x.Type == "id");
             if (id == null)
