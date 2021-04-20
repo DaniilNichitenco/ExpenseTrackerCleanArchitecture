@@ -42,13 +42,13 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
             var wallets = GetWallets();
                 
             var expenses = Fixture.Build<Expense>()
-                .With(x => x.WalletId, () => new Random().Next(1,3) == 1 ? 1 : 2)
+                .With(x => x.WalletId, () => new Random().Next(1,3))
                 .Without(x => x.Wallet)
                 .Without(x => x.Topic)
                 .With(x => x.Date, 
                     () => new Random().Next(1,3) == 1 ? new DateTime(2020, 9, 15) 
                         : new DateTime(2019, 6, 19))
-                .With(x => x.OwnerId, () => new Random().Next(1,3))
+                .With(x => x.OwnerId, () => new Random().Next(1,4))
                 .CreateMany<Expense>(100);
             
             foreach (var expense in expenses)
