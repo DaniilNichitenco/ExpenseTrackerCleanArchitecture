@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
+using ExpenseTracker.Core.Domain.Dtos.Expenses;
 using ExpenseTracker.Core.Domain.Entities;
 using ExpenseTracker.Core.Domain.ViewModels;
 using ExpenseTracker.Infrastructure.API.Authorization.Attributes;
@@ -44,6 +45,27 @@ namespace ExpenseTracker.Web.API.Controllers
             
             var result = _mapper.Map<IEnumerable<ExpenseViewModel>>(expenses);
             
+            return Ok(result);
+        }
+
+        [Read]
+        [HttpGet]
+        public async Task<IActionResult> GetSumOfExpensesForDay(DateTime date, CancellationToken cancellationToken)
+        {
+            var id = User.Claims.FirstOrDefault(x => x.Type == "id");
+            if (id == null)
+            {
+                return Forbid();
+            }
+
+            var expenses = await _mediator.Send(new GetExpensesSumForDayQuery
+            {
+                UserId = long.Parse(id.Value),
+                Date = date
+            }, cancellationToken);
+
+            var result = _mapper.Map<IEnumerable<ExpensesSumViewModel>>(expenses);
+
             return Ok(result);
         }
     }

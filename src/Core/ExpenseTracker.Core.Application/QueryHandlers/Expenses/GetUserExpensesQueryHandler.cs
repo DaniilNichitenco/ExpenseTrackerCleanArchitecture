@@ -10,7 +10,7 @@ using ExpenseTracker.Core.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpenseTracker.Core.Application.QueryHandlers
+namespace ExpenseTracker.Core.Application.QueryHandlers.Expenses
 {
     public class GetUserExpensesQueryHandler : IRequestHandler<GetUserExpensesQuery, IEnumerable<ExpenseDto>>
     {

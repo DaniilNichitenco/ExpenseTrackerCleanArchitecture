@@ -6,11 +6,9 @@ using ExpenseTracker.Infrastructure.IdentityServer.Extensions;
 using ExpenseTracker.Infrastructure.Shared;
 using IdentityModel.Client;
 using IdentityServer4.AccessTokenValidation;
-using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,11 +21,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
-using ExpenseTracker.Core.Application.QueryHandlers;
+using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
 using ExpenseTracker.Core.Domain.AutoMapperProfiles;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ExpenseTracker.Web.API
 {
