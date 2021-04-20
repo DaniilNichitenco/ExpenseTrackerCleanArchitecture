@@ -90,5 +90,26 @@ namespace ExpenseTracker.Web.API.Controllers
 
             return Ok(result);
         }
+        
+        [Read]
+        [HttpGet("sum/year/{date}")]
+        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForYear([FromRoute] DateTime year, CancellationToken cancellationToken)
+        {
+            var userId = User.GetClaim("id");
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            var expenses = await _mediator.Send(new GetExpensesSumForYearQuery
+            {
+                UserId = long.Parse(userId.Value),
+                Date = year
+            }, cancellationToken);
+
+            var result = _mapper.Map<IEnumerable<ExpensesSumViewModel>>(expenses);
+
+            return Ok(result);
+        }
     }
 }
