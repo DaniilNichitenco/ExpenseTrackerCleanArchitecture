@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Domain\ExpenseTracker.Core.Domain.csproj" />
     <ProjectReference Include="..\..\Infastructure\ExpenseTracker.Infrastructure.IdentityServer\ExpenseTracker.Infrastructure.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\Infastructure\ExpenseTracker.Infrastructure.Shared\ExpenseTracker.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
 </Project>
