@@ -93,7 +93,7 @@ namespace ExpenseTracker.Web.API.Controllers
         
         [Read]
         [HttpGet("sum/year/{date}")]
-        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForYear([FromRoute] DateTime year, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForYear([FromRoute] DateTime date, CancellationToken cancellationToken)
         {
             var userId = User.GetClaim("id");
             if (userId == null)
@@ -104,10 +104,32 @@ namespace ExpenseTracker.Web.API.Controllers
             var expenses = await _mediator.Send(new GetExpensesSumForYearQuery
             {
                 UserId = long.Parse(userId.Value),
-                Date = year
+                Date = date
             }, cancellationToken);
 
             var result = _mapper.Map<IEnumerable<ExpensesSumViewModel>>(expenses);
+
+            return Ok(result);
+        }
+
+        [Read]
+        [HttpGet("sum/per-day/month/{date}")]
+        public async Task<ActionResult<IEnumerable<ExpensesSumPerDayViewModel>>> GetSumOfExpensesPerDayForMonth(
+            [FromRoute] DateTime date, CancellationToken cancellationToken)
+        {
+            var userId = User.GetClaim("id");
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            var expenses = await _mediator.Send(new GetExpensesSumPerDayForMonth
+            {
+                Date = date,
+                UserId = long.Parse(userId.Value)
+            }, cancellationToken);
+
+            var result = _mapper.Map<ExpensesSumPerDayViewModel>(expenses);
 
             return Ok(result);
         }
