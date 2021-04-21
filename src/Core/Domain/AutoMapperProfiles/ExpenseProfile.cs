@@ -14,6 +14,9 @@ namespace ExpenseTracker.Core.Domain.AutoMapperProfiles
             CreateMap<ExpenseDto, ExpenseViewModel>();
             
             CreateMap<ExpensesSumDto, ExpensesSumViewModel>();
+
+            CreateMap<ExpensesSumForDayDto, ExpensesSumForDayViewModel>();
+            CreateMap<ExpensesSumPerDayDto, ExpensesSumPerDayViewModel>();
         }
     }
 }

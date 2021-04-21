@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Xunit2;
 using ExpenseTracker.Api.TestsCommon;
+using ExpenseTracker.Api.UnitTests.ClassTestData;
 using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
 using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
@@ -27,6 +28,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
         private readonly GetExpensesSumForDayQueryHandler _getExpensesSumForDayQueryHandler;
         private readonly GetExpensesSumForMonthQueryHandler _getExpensesSumForMonthQueryHandler;
         private readonly GetExpensesSumForYearQueryHandler _getExpensesSumForYearQueryHandler;
+        private readonly GetExpensesSumPerDayForMonthHandler _getExpensesSumPerDayForMonthHandler;
             
         public ExpenseQueryHandlers_Tests()
         {
@@ -36,6 +38,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
             _getExpensesSumForMonthQueryHandler =
                 new GetExpensesSumForMonthQueryHandler(_expenseRepository.Object);
             _getExpensesSumForYearQueryHandler = new GetExpensesSumForYearQueryHandler(_expenseRepository.Object);
+            _getExpensesSumPerDayForMonthHandler = new GetExpensesSumPerDayForMonthHandler(_expenseRepository.Object);
 
             var expenses = GetExpenses();
 
@@ -92,162 +95,121 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
             var expensesDto = await _getUserExpensesQueryHandler.Handle(new GetUserExpensesQuery{UserId = userId}, CancellationToken.None);
             var expenses = await _expenseRepository.Object.Read().Where(x => x.OwnerId == userId).ToListAsync();
             
-            if (expensesDto.Any() || expenses.Any())
+            Assert.All(expensesDto, expense =>
             {
-                Assert.All(expensesDto, expense =>
-                {
-                    Assert.Contains(expenses, e => e.Id == expense.Id);
-                });
+                Assert.Contains(expenses, e => e.Id == expense.Id);
+            });
                 
-                Assert.All(expenses, expense =>
-                {
-                    Assert.Contains(expensesDto, e => e.Id == expense.Id);
-                });
-            }
+            Assert.All(expenses, expense =>
+            {
+                Assert.Contains(expensesDto, e => e.Id == expense.Id);
+            });
         }
 
         [Theory]
-        [AutoData]
-        public async Task GetExpensesSumForDayQueryHandler_ShouldReturnOnlyForOneDateUserExpenses([Range(1,3)]int userId)
+        [ClassData(typeof(UserDateData))]
+        public async Task GetExpensesSumForDayQueryHandler_ShouldReturnOnlyForOneDateUserExpenses(int userId, DateTime date)
         {
-            var date1 = new DateTime(2020, 9, 15);
-            var date2 = new DateTime(2019, 6, 19);
-            var date3 = DateTime.Today;
-            
-            var expensesSumDto1 = await _getExpensesSumForDayQueryHandler.Handle(new GetExpensesSumForDayQuery
+            var expensesSumDto = await _getExpensesSumForDayQueryHandler.Handle(new GetExpensesSumForDayQuery
                 {
                     UserId = userId,
-                    Date = date1
+                    Date = date
                 },
                 CancellationToken.None);
             
-            var expensesSumDto2 = await _getExpensesSumForDayQueryHandler.Handle(new GetExpensesSumForDayQuery
-                {
-                    UserId = userId,
-                    Date = date2
-                },
-                CancellationToken.None);
-            
-            var expensesSumDto3 = await _getExpensesSumForDayQueryHandler.Handle(new GetExpensesSumForDayQuery
-                {
-                    UserId = userId,
-                    Date = date3
-                },
-                CancellationToken.None);
-            
-            var sum1 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Date == date1.Date
+            var expenses = _expenseRepository.Object.Read()
+                .Where(x => x.Date.Date == date.Date
                             && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            var sum2 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Date == date2.Date
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            var sum3 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Date == date3.Date
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
+                );
             
-            Assert.Equal(sum1, expensesSumDto1.Sum(x => x.Sum));
-            Assert.Equal(sum2, expensesSumDto2.Sum(x => x.Sum));
-            Assert.Equal(sum3, expensesSumDto3.Sum(x => x.Sum));
+            
+            Assert.Equal(expenses.Sum(x => x.Money), expensesSumDto.Sum(x => x.Sum));
         }
 
         [Theory]
-        [AutoData]
-        public async Task GetExpensesSumForMonthQueryHandler_ShouldReturnOnlyForOneMonthUserExpenses([Range(1,3)]int userId)
+        [ClassData(typeof(UserDateData))]
+        public async Task GetExpensesSumForMonthQueryHandler_ShouldReturnOnlyForOneMonthUserExpenses(int userId, DateTime date)
         {
-            var date1 = new DateTime(2020, 9, 15);
-            var date2 = new DateTime(2019, 6, 19);
-            var date3 = DateTime.Today;
             
-            var expensesSumDto1 = await _getExpensesSumForMonthQueryHandler.Handle(new GetExpensesSumForMonthQuery
+            var expensesSumDto = await _getExpensesSumForMonthQueryHandler.Handle(new GetExpensesSumForMonthQuery
                 {
                     UserId = userId,
-                    Date = date1
+                    Date = date
                 },
                 CancellationToken.None);
             
-            var expensesSumDto2 = await _getExpensesSumForMonthQueryHandler.Handle(new GetExpensesSumForMonthQuery
-                {
-                    UserId = userId,
-                    Date = date2
-                },
-                CancellationToken.None);
-            
-            var expensesSumDto3 = await _getExpensesSumForMonthQueryHandler.Handle(new GetExpensesSumForMonthQuery
-                {
-                    UserId = userId,
-                    Date = date3
-                },
-                CancellationToken.None);
-            
-            var sum1 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Month == date1.Month
-                            && x.Date.Year == date1.Year
+            var expenses = _expenseRepository.Object.Read()
+                .Where(x => x.Date.Month == date.Month
+                            && x.Date.Year == date.Year
                             && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            var sum2 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Month == date2.Month
-                            && x.Date.Year == date2.Year
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            var sum3 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Month == date3.Month
-                            && x.Date.Year == date3.Year
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            
-            Assert.Equal(sum1, expensesSumDto1.Sum(x => x.Sum));
-            Assert.Equal(sum2, expensesSumDto2.Sum(x => x.Sum));
-            Assert.Equal(sum3, expensesSumDto3.Sum(x => x.Sum));
+                            );
+            Assert.Equal(expenses.Sum(x => x.Money), expensesSumDto.Sum(x => x.Sum));
         }
         
         [Theory]
-        [AutoData]
-        public async Task GetExpensesSumForYearQueryHandler_ShouldReturnOnlyForOneYearUserExpenses([Range(1,3)]int userId)
+        [ClassData(typeof(UserDateData))]
+        public async Task GetExpensesSumForYearQueryHandler_ShouldReturnOnlyForOneYearUserExpenses(int userId, DateTime date)
         {
-            var date1 = new DateTime(2020, 9, 15);
-            var date2 = new DateTime(2019, 6, 19);
-            var date3 = DateTime.Today;
             
-            var expensesSumDto1 = await _getExpensesSumForYearQueryHandler.Handle(new GetExpensesSumForYearQuery
+            var expensesSumDto = await _getExpensesSumForYearQueryHandler.Handle(new GetExpensesSumForYearQuery
                 {
                     UserId = userId,
-                    Date = date1
+                    Date = date
                 },
                 CancellationToken.None);
             
-            var expensesSumDto2 = await _getExpensesSumForYearQueryHandler.Handle(new GetExpensesSumForYearQuery
+            
+            
+            var expenses = _expenseRepository.Object.Read()
+                .Where(x => x.Date.Year == date.Year
+                            && x.OwnerId == userId
+                            );
+            
+            Assert.Equal(expenses.Sum(x => x.Money), expensesSumDto.Sum(x => x.Sum));
+        }
+        
+        [Theory]
+        [ClassData(typeof(UserDateData))]
+        public async Task GetExpensesSumPerDayForMonthHandler_ShouldReturnOnlyUserExpensesSumForOneMonthPerEachDay(int userId, DateTime date)
+        {
+            var countDays = DateTime.DaysInMonth(date.Year, date.Month);
+            
+            var expensesDto = await _getExpensesSumPerDayForMonthHandler.Handle(new GetExpensesSumPerDayForMonth
+            {
+                UserId = userId, 
+                Date = date
+            }, CancellationToken.None);
+            
+            var expenses = await _expenseRepository.Object.Read()
+                .Include(x => x.Wallet)
+                .Where(x => x.OwnerId == userId
+                && x.Date.Year == date.Year
+                && x.Date.Month == date.Month
+                )
+                .GroupBy(x => x.WalletId)
+                .Select(x => new
                 {
-                    UserId = userId,
-                    Date = date2
-                },
-                CancellationToken.None);
+                    WalletId = x.Key,
+                    x.FirstOrDefault().Wallet.CurrencyCode,
+                    Expenses = x.GroupBy(x => new { x.Date.Day })
+                })
+                .ToListAsync();
             
-            var expensesSumDto3 = await _getExpensesSumForYearQueryHandler.Handle(new GetExpensesSumForYearQuery
+            Assert.All(expensesDto, expenseSum =>
+            {
+                Assert.Equal(expenseSum.Expenses.Count(), countDays);
+            });
+            
+            Assert.All(expenses, expenseSum =>
+            {
+                var expenseDto = expensesDto.FirstOrDefault(x => x.CurrencyCode == expenseSum.CurrencyCode);
+                Assert.NotNull(expenseDto);
+                
+                Assert.All(expenseSum.Expenses, expense =>
                 {
-                    UserId = userId,
-                    Date = date3
-                },
-                CancellationToken.None);
-            
-            var sum1 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Year == date1.Year
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            var sum2 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Year == date2.Year
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            var sum3 = _expenseRepository.Object.Read()
-                .Where(x => x.Date.Year == date3.Year
-                            && x.OwnerId == userId
-                ).Sum(x => x.Money);
-            
-            Assert.Equal(sum1, expensesSumDto1.Sum(x => x.Sum));
-            Assert.Equal(sum2, expensesSumDto2.Sum(x => x.Sum));
-            Assert.Equal(sum3, expensesSumDto3.Sum(x => x.Sum));
+                    Assert.Equal(expense.Sum(x => x.Money), expenseDto.Expenses.Sum(x => x.Sum));
+                });
+            });
         }
     }
 }
