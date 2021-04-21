@@ -10,18 +10,18 @@ namespace ExpenseTracker.Api.TestsCommon
 {
     public abstract class CommonBaseTestClassFixture : IDisposable
     {
-        protected static IMapper Mapper { get; }
-       protected static IFixture Fixture { get; }
+        protected static IMapper _mapper { get; }
+       protected static IFixture _fixture { get; }
 
        static CommonBaseTestClassFixture()
        {
-           Fixture = new Fixture();
+           _fixture = new Fixture();
            var config = new MapperConfiguration(cfg =>
            {
                cfg.AddMaps(typeof(ExpenseProfile).GetTypeInfo().Assembly);
            });
 
-           Mapper = config.CreateMapper();
+           _mapper = config.CreateMapper();
        }
         
         public void Dispose() { }
