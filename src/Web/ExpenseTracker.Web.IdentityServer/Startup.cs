@@ -1,6 +1,6 @@
 using ExpenseTracker.Core.Domain.Auth;
 using ExpenseTracker.Core.Domain.Schemas;
-using ExpenseTracker.Infrastructure.IdentityServer;
+using ExpenseTracker.Infrastructure.Repository.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

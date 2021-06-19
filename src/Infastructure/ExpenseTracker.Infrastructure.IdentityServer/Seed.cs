@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using static IdentityServer4.Models.GrantType;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer
 {
     public static class Seed
     {

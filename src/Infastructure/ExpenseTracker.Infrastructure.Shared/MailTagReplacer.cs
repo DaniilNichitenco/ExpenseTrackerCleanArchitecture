@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Infrastructure.Shared
+namespace ExpenseTracker.Infrastructure.Repository.Shared
 {
     public class MailTagReplacer : ITagReplacer
     {

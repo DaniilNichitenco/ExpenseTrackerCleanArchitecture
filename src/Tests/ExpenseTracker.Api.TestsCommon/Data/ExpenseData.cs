@@ -10,45 +10,29 @@ namespace ExpenseTracker.Api.TestsCommon.Data
     {
         public static IEnumerable<Expense> GetExpenses()
         {
-            var wallets = GetWallets();
+            var wallets = WalletData.GetWallets().ToList();
+            var users = UserData.GetUsers().ToList();
             
             var expenses = _fixture.Build<Expense>()
-            .With(x => x.WalletId, () => new Random().Next(1,3))
+            .With(x => x.WalletId, () => wallets[new Random().Next(wallets.Count)].Id)
             .Without(x => x.Wallet)
             .Without(x => x.Topic)
             .With(x => x.Date, 
             () => new Random().Next(1,3) == 1 ? new DateTime(2020, 9, 15) 
                 : new DateTime(2019, 6, 19))
-            .With(x => x.OwnerId, () => new Random().Next(1,4))
+            .With(x => x.OwnerId, () => users[new Random().Next(users.Count)].Id)
             .CreateMany<Expense>(100);
             
             foreach (var expense in expenses)
             {
                 expense.Wallet = wallets.FirstOrDefault(x => x.Id == expense.WalletId);
+                if (expense.Wallet.OwnerId != expense.OwnerId)
+                {
+                    expense.Wallet.OwnerId = expense.OwnerId;
+                }
             }
 
             return expenses;
-        }
-        
-        public static IEnumerable<Wallet> GetWallets()
-        {
-            var wallets = new List<Wallet>
-            {
-                new Wallet
-                {
-                    Id = 1,
-                    CurrencyCode = "mdl",
-                    Bill = 10000
-                },
-                new Wallet
-                {
-                    Id = 2,
-                    CurrencyCode = "eur",
-                    Bill = 5000
-                }
-            };
-
-            return wallets;
         }
     }
 }

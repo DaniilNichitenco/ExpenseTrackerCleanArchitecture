@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer.Migrations.PersistedGrantDb
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer.Migrations.PersistedGrantDb
 {
     public partial class InitialMigration : Migration
     {

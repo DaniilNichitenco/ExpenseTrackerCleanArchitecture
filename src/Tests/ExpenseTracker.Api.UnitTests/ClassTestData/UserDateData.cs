@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using ExpenseTracker.Api.TestsCommon.Data;
 
 namespace ExpenseTracker.Api.UnitTests.ClassTestData
 {
@@ -8,41 +10,43 @@ namespace ExpenseTracker.Api.UnitTests.ClassTestData
     {
         public IEnumerator<object[]> GetEnumerator()
         {
+            var users = UserData.GetUsers().ToList();
+            
             yield return new object[]
             {
-                1, new DateTime(2020, 9, 15)
+                users[0].Id, new DateTime(2020, 9, 15)
             };
             yield return new object[]
             {
-                2, new DateTime(2020, 9, 15)
+                users[1].Id, new DateTime(2020, 9, 15)
             };
             yield return new object[]
             {
-                3, new DateTime(2020, 9, 15)
+                users[2].Id, new DateTime(2020, 9, 15)
             };
             yield return new object[]
             {
-                1, new DateTime(2019, 6, 19)
+                users[0].Id, new DateTime(2019, 6, 19)
             };
             yield return new object[]
             {
-                2, new DateTime(2019, 6, 19)
+                users[1].Id, new DateTime(2019, 6, 19)
             };
             yield return new object[]
             {
-                3, new DateTime(2019, 6, 19)
+                users[2].Id, new DateTime(2019, 6, 19)
             };
             yield return new object[]
             {
-                1, DateTime.Now
+                users[0].Id, DateTime.Now
             };
             yield return new object[]
             {
-                2, DateTime.Now
+                users[1].Id, DateTime.Now
             };
             yield return new object[]
             {
-                3, DateTime.Now
+                users[2].Id, DateTime.Now
             };
         }
 

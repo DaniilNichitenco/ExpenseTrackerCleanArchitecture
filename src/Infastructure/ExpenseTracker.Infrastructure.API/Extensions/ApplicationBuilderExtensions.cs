@@ -1,7 +1,7 @@
-﻿using ExpenseTracker.Infrastructure.API.Middlewares;
+﻿using ExpenseTracker.Infrastructure.Repository.API.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
-namespace ExpenseTracker.Infrastructure.API.Extensions
+namespace ExpenseTracker.Infrastructure.Repository.API.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

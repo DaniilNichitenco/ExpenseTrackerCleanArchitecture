@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using ExpenseTracker.Api.TestsCommon;
 using ExpenseTracker.Api.TestsCommon.Data;
+using ExpenseTracker.Api.UnitTests.ClassTestData;
 using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
 using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
@@ -23,12 +25,12 @@ namespace ExpenseTracker.Api.UnitTests.Controllers
 {
     public class ExpensesController_Tests : ControllerHelper
     {
-        private readonly Mock<IEFRepository<Expense>> _expenseRepository;
+        private readonly Mock<IGenericRepository<Expense>> _expenseRepository;
         private readonly ExpensesController _controller;
         
         public ExpensesController_Tests()
         {
-            _expenseRepository = new Mock<IEFRepository<Expense>>();
+            _expenseRepository = new Mock<IGenericRepository<Expense>>();
             _controller = new ExpensesController(_mediator.Object, _mapper)
             {
                 ControllerContext = {HttpContext = new DefaultHttpContext()}
@@ -43,8 +45,8 @@ namespace ExpenseTracker.Api.UnitTests.Controllers
         }
 
         [Theory]
-        [AutoData]
-        public async Task GetExpenses_ShouldReturnEnumerableOfViewModelType([Range(1,3)]int userId)
+        [ClassData(typeof(UserIdData))]
+        public async Task GetExpenses_ShouldReturnEnumerableOfViewModelType(Guid userId)
         {
             _controller.HttpContext.User = new ClaimsPrincipal(new List<ClaimsIdentity>()
             {

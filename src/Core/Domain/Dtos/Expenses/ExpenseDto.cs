@@ -5,9 +5,9 @@ namespace ExpenseTracker.Core.Domain.Dtos.Expenses
 {
     public class ExpenseDto
     {
-        public long Id { get; set; }
-        public long WalletId { get; set; }
-        public long? TopicId { get; set; }
+        public Guid Id { get; set; }
+        public Guid WalletId { get; set; }
+        public Guid? TopicId { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public double Money { get; set; }

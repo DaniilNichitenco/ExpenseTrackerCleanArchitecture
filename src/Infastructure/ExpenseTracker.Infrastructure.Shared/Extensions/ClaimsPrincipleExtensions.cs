@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace ExpenseTracker.Infrastructure.Shared.Extensions
+namespace ExpenseTracker.Infrastructure.Repository.Shared.Extensions
 {
     public static class ClaimsPrincipleExtensions
     {
@@ -12,7 +12,7 @@ namespace ExpenseTracker.Infrastructure.Shared.Extensions
             {
                 return claimsPrincipal.Claims.FirstOrDefault(x => x.Type == name);
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }

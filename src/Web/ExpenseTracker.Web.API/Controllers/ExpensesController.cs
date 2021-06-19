@@ -11,8 +11,8 @@ using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
 using ExpenseTracker.Core.Domain.Dtos.Expenses;
 using ExpenseTracker.Core.Domain.Entities;
 using ExpenseTracker.Core.Domain.ViewModels;
-using ExpenseTracker.Infrastructure.API.Authorization.Attributes;
-using ExpenseTracker.Infrastructure.Shared.Extensions;
+using ExpenseTracker.Infrastructure.Repository.API.Authorization.Attributes;
+using ExpenseTracker.Infrastructure.Repository.Shared.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,8 +41,9 @@ namespace ExpenseTracker.Web.API.Controllers
             {
                 return Forbid();
             }
-            
-            var expenses = await _mediator.Send(new GetUserExpensesQuery { UserId = long.Parse(userId.Value) }, cancellationToken);
+
+            var expenses = await _mediator.Send(new GetUserExpensesQuery {UserId = new Guid(userId.Value)},
+                cancellationToken);
             
             var result = _mapper.Map<IEnumerable<ExpenseViewModel>>(expenses);
             
@@ -61,7 +62,7 @@ namespace ExpenseTracker.Web.API.Controllers
 
             var expenses = await _mediator.Send(new GetExpensesSumForDayQuery
             {
-                UserId = long.Parse(userId.Value),
+                UserId = new Guid(userId.Value),
                 Date = date
             }, cancellationToken);
 
@@ -82,7 +83,7 @@ namespace ExpenseTracker.Web.API.Controllers
 
             var expenses = await _mediator.Send(new GetExpensesSumForMonthQuery
             {
-                UserId = long.Parse(userId.Value),
+                UserId = new Guid(userId.Value),
                 Date = date
             }, cancellationToken);
 
@@ -103,7 +104,7 @@ namespace ExpenseTracker.Web.API.Controllers
 
             var expenses = await _mediator.Send(new GetExpensesSumForYearQuery
             {
-                UserId = long.Parse(userId.Value),
+                UserId = new Guid(userId.Value),
                 Date = date
             }, cancellationToken);
 
@@ -126,7 +127,7 @@ namespace ExpenseTracker.Web.API.Controllers
             var expenses = await _mediator.Send(new GetExpensesSumPerDayForMonth
             {
                 Date = date,
-                UserId = long.Parse(userId.Value)
+                UserId = new Guid(userId.Value)
             }, cancellationToken);
 
             var result = _mapper.Map<ExpensesSumPerDayViewModel>(expenses);

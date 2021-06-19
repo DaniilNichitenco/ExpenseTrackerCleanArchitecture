@@ -1,6 +1,6 @@
 ﻿using ExpenseTracker.Core.Application.Interfaces;
 
-namespace ExpenseTracker.Infrastructure.Shared
+namespace ExpenseTracker.Infrastructure.Repository.Shared
 {
     public class EmailSettings : IEmailSettings
     {

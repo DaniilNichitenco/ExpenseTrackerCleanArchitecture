@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Infrastructure.API.Extensions
+namespace ExpenseTracker.Infrastructure.Repository.API.Extensions
 {
     public static class MvcOptionsExtensions
     {

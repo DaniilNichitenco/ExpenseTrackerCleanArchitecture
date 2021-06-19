@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Infrastructure.API.EFConfiguration
+namespace ExpenseTracker.Infrastructure.Repository.API.EFConfiguration
 {
     public class WalletConfiguration : IEntityTypeConfiguration<Wallet>
     {

@@ -13,9 +13,9 @@ namespace ExpenseTracker.Core.Application.QueryHandlers.Expenses
 {
     public class GetExpensesSumForYearQueryHandler : IRequestHandler<GetExpensesSumForYearQuery, IEnumerable<ExpensesSumDto>>
     {
-        private readonly IEFRepository<Expense> _expenseRepository;
+        private readonly IGenericRepository<Expense> _expenseRepository;
 
-        public GetExpensesSumForYearQueryHandler(IEFRepository<Expense> expenseRepository)
+        public GetExpensesSumForYearQueryHandler(IGenericRepository<Expense> expenseRepository)
         {
             _expenseRepository = expenseRepository;
         }

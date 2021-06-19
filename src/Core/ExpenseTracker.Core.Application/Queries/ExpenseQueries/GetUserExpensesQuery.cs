@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using ExpenseTracker.Core.Domain.Dtos.Expenses;
 using ExpenseTracker.Core.Domain.Entities;
@@ -8,6 +9,6 @@ namespace ExpenseTracker.Core.Application.Queries.ExpenseQueries
 {
     public class GetUserExpensesQuery : IRequest<IEnumerable<ExpenseDto>>
     {
-        public long UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

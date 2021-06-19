@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer.Migrations.PersistedGrantDb
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer.Migrations.PersistedGrantDb
 {
     [DbContext(typeof(PersistedGrantDbContext))]
     [Migration("20210324103017_InitialMigration")]

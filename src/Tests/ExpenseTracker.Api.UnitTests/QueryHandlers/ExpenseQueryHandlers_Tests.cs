@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoFixture;
-using AutoFixture.Xunit2;
 using ExpenseTracker.Api.TestsCommon;
 using ExpenseTracker.Api.TestsCommon.Data;
 using ExpenseTracker.Api.UnitTests.ClassTestData;
@@ -13,8 +9,6 @@ using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
 using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
 using ExpenseTracker.Core.Domain.Entities;
-using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
-using JetBrains.ReSharper.TestRunner.Adapters.XUnit.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
@@ -24,7 +18,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
 {
     public class ExpenseQueryHandlers_Tests : CommonBaseTestClassFixture
     {
-        private readonly Mock<IEFRepository<Expense>> _expenseRepository;
+        private readonly Mock<IGenericRepository<Expense>> _expenseRepository;
         private readonly GetUserExpensesQueryHandler _getUserExpensesQueryHandler;
         private readonly GetExpensesSumForDayQueryHandler _getExpensesSumForDayQueryHandler;
         private readonly GetExpensesSumForMonthQueryHandler _getExpensesSumForMonthQueryHandler;
@@ -33,7 +27,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
             
         public ExpenseQueryHandlers_Tests()
         {
-            _expenseRepository = new Mock<IEFRepository<Expense>>();
+            _expenseRepository = new Mock<IGenericRepository<Expense>>();
             _getUserExpensesQueryHandler = new GetUserExpensesQueryHandler(_expenseRepository.Object, _mapper);
             _getExpensesSumForDayQueryHandler = new GetExpensesSumForDayQueryHandler(_expenseRepository.Object);
             _getExpensesSumForMonthQueryHandler =
@@ -47,8 +41,8 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
         }
         
         [Theory]
-        [AutoData]
-        public async Task GetUserExpensesQueryHandler_ShouldReturnOnlyUserExpenses([Range(1,3)]int userId)
+        [ClassData(typeof(UserIdData))]
+        public async Task GetUserExpensesQueryHandler_ShouldReturnOnlyUserExpenses(Guid userId)
         {
             var expensesDto = await _getUserExpensesQueryHandler.Handle(new GetUserExpensesQuery{UserId = userId}, CancellationToken.None);
             var expenses = await _expenseRepository.Object.Read().Where(x => x.OwnerId == userId).ToListAsync();
@@ -66,7 +60,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
 
         [Theory]
         [ClassData(typeof(UserDateData))]
-        public async Task GetExpensesSumForDayQueryHandler_ShouldReturnOnlyForOneDateUserExpenses(int userId, DateTime date)
+        public async Task GetExpensesSumForDayQueryHandler_ShouldReturnOnlyForOneDateUserExpenses(Guid userId, DateTime date)
         {
             var expensesSumDto = await _getExpensesSumForDayQueryHandler.Handle(new GetExpensesSumForDayQuery
                 {
@@ -86,7 +80,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
 
         [Theory]
         [ClassData(typeof(UserDateData))]
-        public async Task GetExpensesSumForMonthQueryHandler_ShouldReturnOnlyForOneMonthUserExpenses(int userId, DateTime date)
+        public async Task GetExpensesSumForMonthQueryHandler_ShouldReturnOnlyForOneMonthUserExpenses(Guid userId, DateTime date)
         {
             
             var expensesSumDto = await _getExpensesSumForMonthQueryHandler.Handle(new GetExpensesSumForMonthQuery
@@ -106,7 +100,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
         
         [Theory]
         [ClassData(typeof(UserDateData))]
-        public async Task GetExpensesSumForYearQueryHandler_ShouldReturnOnlyForOneYearUserExpenses(int userId, DateTime date)
+        public async Task GetExpensesSumForYearQueryHandler_ShouldReturnOnlyForOneYearUserExpenses(Guid userId, DateTime date)
         {
             
             var expensesSumDto = await _getExpensesSumForYearQueryHandler.Handle(new GetExpensesSumForYearQuery
@@ -128,7 +122,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
         
         [Theory]
         [ClassData(typeof(UserDateData))]
-        public async Task GetExpensesSumPerDayForMonthHandler_ShouldReturnOnlyUserExpensesSumForOneMonthPerEachDay(int userId, DateTime date)
+        public async Task GetExpensesSumPerDayForMonthHandler_ShouldReturnOnlyUserExpensesSumForOneMonthPerEachDay(Guid userId, DateTime date)
         {
             var countDays = DateTime.DaysInMonth(date.Year, date.Month);
             

@@ -14,10 +14,10 @@ namespace ExpenseTracker.Core.Application.QueryHandlers.Expenses
 {
     public class GetUserExpensesQueryHandler : IRequestHandler<GetUserExpensesQuery, IEnumerable<ExpenseDto>>
     {
-        private readonly IEFRepository<Expense> _expenseRepository;
+        private readonly IGenericRepository<Expense> _expenseRepository;
         private readonly IMapper _mapper;
 
-        public GetUserExpensesQueryHandler(IEFRepository<Expense> expenseRepository, 
+        public GetUserExpensesQueryHandler(IGenericRepository<Expense> expenseRepository, 
             IMapper mapper)
         {
             _expenseRepository = expenseRepository;
