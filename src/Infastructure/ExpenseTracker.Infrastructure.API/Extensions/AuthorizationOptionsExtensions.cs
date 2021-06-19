@@ -1,8 +1,8 @@
-﻿using ExpenseTracker.Infrastructure.API.Authorization.Requirements;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using ExpenseTracker.Infrastructure.Repository.API.Authorization.Requirements;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer.Extensions
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer.Extensions
 {
     public static class AuthorizationOptionsExtensions
     {

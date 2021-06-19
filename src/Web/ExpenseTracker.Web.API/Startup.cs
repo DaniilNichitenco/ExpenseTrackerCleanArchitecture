@@ -1,9 +1,9 @@
 using ExpenseTracker.Core.Application.Interfaces;
-using ExpenseTracker.Infrastructure.API;
-using ExpenseTracker.Infrastructure.API.Authorization.Handlers;
-using ExpenseTracker.Infrastructure.API.Extensions;
-using ExpenseTracker.Infrastructure.IdentityServer.Extensions;
-using ExpenseTracker.Infrastructure.Shared;
+using ExpenseTracker.Infrastructure.Repository.API;
+using ExpenseTracker.Infrastructure.Repository.API.Authorization.Handlers;
+using ExpenseTracker.Infrastructure.Repository.API.Extensions;
+using ExpenseTracker.Infrastructure.Repository.IdentityServer.Extensions;
+using ExpenseTracker.Infrastructure.Repository.Shared;
 using IdentityModel.Client;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -69,7 +69,7 @@ namespace ExpenseTracker.Web.API
 
             services.AddMediatR(typeof(GetUserExpensesQueryHandler),typeof(GetUserExpensesQuery));
 
-            services.AddScoped(typeof(IEFRepository<>), typeof(EFRepository<>));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddSingleton<ITagReplacer, MailTagReplacer>();
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
             //services.AddSingleton<TelemetryClient>();

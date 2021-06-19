@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Infrastructure.API.Authorization.Requirements
+namespace ExpenseTracker.Infrastructure.Repository.API.Authorization.Requirements
 {
     public class ScopeRequirement : IAuthorizationRequirement
     {

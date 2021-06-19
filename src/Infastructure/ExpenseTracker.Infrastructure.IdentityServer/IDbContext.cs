@@ -1,11 +1,12 @@
-﻿using ExpenseTracker.Core.Domain.Auth;
+﻿using System;
+using ExpenseTracker.Core.Domain.Auth;
 using ExpenseTracker.Core.Domain.Schemas;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer
 {
-    public class IDbContext : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class IDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public IDbContext(DbContextOptions<IDbContext> options) : base(options) 
         {

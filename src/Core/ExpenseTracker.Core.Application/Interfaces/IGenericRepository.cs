@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Core.Domain.Entities;
+﻿using System;
+using ExpenseTracker.Core.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ExpenseTracker.Core.Application.Interfaces
 {
-    public interface IEFRepository<TEntity> where TEntity : BaseEntity
+    public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
-        TEntity GetById(long id);
-        Task<TEntity> GetByIdAsync(long id, CancellationToken cancellationToken = default);
+        TEntity GetById(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         List<TEntity> List();
         Task<List<TEntity>> ListAsync(CancellationToken cancellationToken = default);
         Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);

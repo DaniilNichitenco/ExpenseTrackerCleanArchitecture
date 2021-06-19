@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Domain.Auth;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer.Extensions
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer.Extensions
 {
     public static class HostExtensions
     {

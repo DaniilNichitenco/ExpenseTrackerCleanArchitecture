@@ -1,10 +1,10 @@
-﻿using ExpenseTracker.Infrastructure.API.Authorization.Requirements;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Infrastructure.Repository.API.Authorization.Requirements;
 
-namespace ExpenseTracker.Infrastructure.API.Authorization.Handlers
+namespace ExpenseTracker.Infrastructure.Repository.API.Authorization.Handlers
 {
     public class ScopeHandler : AuthorizationHandler<ScopeRequirement>
     {

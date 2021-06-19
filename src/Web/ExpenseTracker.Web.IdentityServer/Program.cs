@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ExpenseTracker.Infrastructure.IdentityServer.Extensions;
+using ExpenseTracker.Infrastructure.Repository.IdentityServer.Extensions;
 
 namespace ExpenseTracker.Web.IdentityServer
 {
