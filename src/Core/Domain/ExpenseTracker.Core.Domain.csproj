@@ -16,4 +16,16 @@
     <Folder Include="CommandHandlers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Constants\Charts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Constants\Charts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Constants\Charts\**" />
+  </ItemGroup>
+
 </Project>

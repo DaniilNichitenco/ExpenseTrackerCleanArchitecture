@@ -1,20 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
-using ExpenseTracker.Core.Domain.Dtos.Expenses;
-using ExpenseTracker.Core.Domain.Entities;
 using ExpenseTracker.Core.Domain.ViewModels;
 using ExpenseTracker.Infrastructure.Repository.API.Authorization.Attributes;
 using ExpenseTracker.Infrastructure.Repository.Shared.Extensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Web.API.Controllers
 {
