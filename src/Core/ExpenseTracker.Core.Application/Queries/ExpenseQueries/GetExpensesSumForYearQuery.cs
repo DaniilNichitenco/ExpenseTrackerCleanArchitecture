@@ -8,6 +8,6 @@ namespace ExpenseTracker.Core.Application.Queries.ExpenseQueries
     public class GetExpensesSumForYearQuery : IRequest<IEnumerable<ExpensesSumDto>>
     {
         public Guid UserId { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
     }
 }

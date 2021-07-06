@@ -20,10 +20,13 @@ using NSwag.Generation.Processors.Security;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
+using ExpenseTracker.Core.Application;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
 using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
 using ExpenseTracker.Core.Domain.AutoMapperProfiles;
+using ExpenseTracker.Infrastructure.Repository.Shared.SignalR;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ExpenseTracker.Web.API
 {
@@ -72,12 +75,15 @@ namespace ExpenseTracker.Web.API
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddSingleton<ITagReplacer, MailTagReplacer>();
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
             //services.AddSingleton<TelemetryClient>();
             services.AddSingleton<IDiscoveryCache>(s =>
             {
                 var factory = s.GetRequiredService<IHttpClientFactory>();
                 return new DiscoveryCache(Configuration["ApiResourceBaseUrls:AuthServer"], () => factory.CreateClient());
             });
+
+            services.AddSignalR();
 
             services.AddControllers(options =>
             {
@@ -144,6 +150,7 @@ namespace ExpenseTracker.Web.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChartHub>("/chartHub");
             });
         }
     }
