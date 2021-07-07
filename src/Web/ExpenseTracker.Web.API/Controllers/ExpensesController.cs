@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
+using ExpenseTracker.Core.Domain.Enums;
 using ExpenseTracker.Core.Domain.ViewModels;
 using ExpenseTracker.Infrastructure.Repository.API.Authorization.Attributes;
 using ExpenseTracker.Infrastructure.Repository.Shared.Extensions;
@@ -45,8 +46,8 @@ namespace ExpenseTracker.Web.API.Controllers
         }
 
         [Read]
-        [HttpGet("sum/{date}")]
-        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForDay([FromRoute] DateTime date, CancellationToken cancellationToken)
+        [HttpGet("sum/{expensesForPeriod}/{date}")]
+        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForPeriod([FromRoute] ExpensesForPeriod expensesForPeriod, [FromRoute] DateTime date, CancellationToken cancellationToken)
         {
             var userId = User.GetClaim("id");
             if (userId == null)
@@ -54,50 +55,9 @@ namespace ExpenseTracker.Web.API.Controllers
                 return Forbid();
             }
 
-            var expenses = await _mediator.Send(new GetExpensesSumForDayQuery
+            var expenses = await _mediator.Send(new GetExpensesForPeriodQuery
             {
-                UserId = new Guid(userId.Value),
-                Date = date
-            }, cancellationToken);
-
-            var result = _mapper.Map<IEnumerable<ExpensesSumViewModel>>(expenses);
-
-            return Ok(result);
-        }
-
-        [Read]
-        [HttpGet("sum/month/{date}")]
-        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForMonth([FromRoute] DateTime date, CancellationToken cancellationToken)
-        {
-            var userId = User.GetClaim("id");
-            if (userId == null)
-            {
-                return Forbid();
-            }
-
-            var expenses = await _mediator.Send(new GetExpensesSumForMonthQuery
-            {
-                UserId = new Guid(userId.Value),
-                Date = date
-            }, cancellationToken);
-
-            var result = _mapper.Map<IEnumerable<ExpensesSumViewModel>>(expenses);
-
-            return Ok(result);
-        }
-        
-        [Read]
-        [HttpGet("sum/year/{date}")]
-        public async Task<ActionResult<IEnumerable<ExpensesSumViewModel>>> GetSumOfExpensesForYear([FromRoute] DateTime date, CancellationToken cancellationToken)
-        {
-            var userId = User.GetClaim("id");
-            if (userId == null)
-            {
-                return Forbid();
-            }
-
-            var expenses = await _mediator.Send(new GetExpensesSumForYearQuery
-            {
+                ExpensesForPeriod = expensesForPeriod,
                 UserId = new Guid(userId.Value),
                 Date = date
             }, cancellationToken);
