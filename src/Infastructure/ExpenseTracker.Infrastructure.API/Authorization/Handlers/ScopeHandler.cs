@@ -12,16 +12,12 @@ namespace ExpenseTracker.Infrastructure.Repository.API.Authorization.Handlers
         {
 
             var claims = context.User.Claims.Where(c => c.Type == "scope");
-            if(claims.Count() == 0)
+            if(!claims.Any())
             {
                 return Task.CompletedTask;
             }
 
-            var scopes = new List<string>();
-            foreach(var c in claims)
-            {
-                scopes.Add(c.Value);
-            }
+            var scopes = claims.Select(c => c.Value).ToList();
 
             if (requirement.RequireAll)
             {

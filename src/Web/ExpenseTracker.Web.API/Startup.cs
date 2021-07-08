@@ -26,6 +26,7 @@ using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
 using ExpenseTracker.Core.Domain.AutoMapperProfiles;
 using ExpenseTracker.Infrastructure.Repository.Shared.SignalR;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ExpenseTracker.Web.API
@@ -67,10 +68,9 @@ namespace ExpenseTracker.Web.API
                 sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
 
             services.AddHttpContextAccessor();
-            services.AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(ExpenseProfile).GetTypeInfo().Assembly);
+            services.AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(ExpenseProfile).GetTypeInfo().Assembly,
+                typeof(Infrastructure.API.AutoMapperProfiles.ExpenseProfile).GetTypeInfo().Assembly);
             services.AddScoped<ISendingManager, SendingManager>();
-
-            services.AddMediatR(typeof(GetUserExpensesQueryHandler),typeof(GetUserExpensesQuery));
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddSingleton<ITagReplacer, MailTagReplacer>();
@@ -82,8 +82,12 @@ namespace ExpenseTracker.Web.API
                 var factory = s.GetRequiredService<IHttpClientFactory>();
                 return new DiscoveryCache(Configuration["ApiResourceBaseUrls:AuthServer"], () => factory.CreateClient());
             });
+            
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSignalR();
+            
+            services.AddMediatR(typeof(GetUserExpensesQueryHandler),typeof(GetUserExpensesQuery));
 
             services.AddControllers(options =>
             {

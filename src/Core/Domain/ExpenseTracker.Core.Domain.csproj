@@ -12,20 +12,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="CommandHandlers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Constants\Charts\**" />
+    <Compile Remove="Commands\**" />
+    <Compile Remove="CommandHandlers\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="Constants\Charts\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <EmbeddedResource Remove="CommandHandlers\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Constants\Charts\**" />
+    <None Remove="Commands\**" />
+    <None Remove="CommandHandlers\**" />
   </ItemGroup>
 
 </Project>

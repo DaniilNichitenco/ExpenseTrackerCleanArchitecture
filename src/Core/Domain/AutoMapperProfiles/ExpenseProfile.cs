@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using ExpenseTracker.Core.Domain.Dtos.Expenses;
 using ExpenseTracker.Core.Domain.Entities;
 using ExpenseTracker.Core.Domain.ViewModels;
