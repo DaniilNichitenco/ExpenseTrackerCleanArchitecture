@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using ExpenseTracker.Core.Application.Commands;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
 using ExpenseTracker.Core.Domain.Enums;
 using ExpenseTracker.Core.Domain.ViewModels;
@@ -85,6 +86,55 @@ namespace ExpenseTracker.Web.API.Controllers
             }, cancellationToken);
 
             var result = _mapper.Map<ExpensesSumPerDayViewModel>(expenses);
+
+            return Ok(result);
+        }
+        
+        [Write]
+        [HttpPut]
+        public async Task<ActionResult<Guid>> CreateExpense(
+            [FromBody] CreateExpenseCommand createExpenseCommand, CancellationToken cancellationToken)
+        {
+            var userId = User.GetClaim("id");
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            createExpenseCommand.OwnerId = new Guid(userId.Value);
+
+            var result = await _mediator.Send(createExpenseCommand, cancellationToken);
+
+            return Ok(result);
+        }
+        
+        [Write]
+        [HttpPost("{id}")]
+        public async Task<ActionResult<Guid>> UpdateExpense([FromRoute] Guid id,
+            [FromBody] UpdateExpenseCommand updateExpenseCommand, CancellationToken cancellationToken)
+        {
+            var userId = User.GetClaim("id");
+            if (userId == null)
+            {
+                return Forbid();
+            }
+
+            updateExpenseCommand.Id = id;
+            updateExpenseCommand.OwnerId = new Guid(userId.Value);
+
+            var result = await _mediator.Send(updateExpenseCommand, cancellationToken);
+
+            return Ok(result);
+        }
+
+        [Write]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Guid>> DeleteExpense([FromRoute] Guid id,
+            [FromBody] DeleteEntityCommand deleteEntityCommand, CancellationToken cancellationToken)
+        {
+            deleteEntityCommand.Id = id;
+
+            var result = await _mediator.Send(deleteEntityCommand, cancellationToken);
 
             return Ok(result);
         }

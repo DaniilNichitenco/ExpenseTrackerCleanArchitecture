@@ -26,4 +26,20 @@
     <ProjectReference Include="..\..\Core\ExpenseTracker.Core.Application\ExpenseTracker.Core.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Authorization\Attributes\Filters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Authorization\Attributes\Filters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Authorization\Attributes\Filters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authorization\Filters" />
+  </ItemGroup>
+
 </Project>
