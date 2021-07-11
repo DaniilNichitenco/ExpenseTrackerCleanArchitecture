@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer.Migrations.PersistedGrantDb
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer.Migrations.PersistedGrantDb
 {
     [DbContext(typeof(PersistedGrantDbContext))]
     partial class PersistedGrantDbContextModelSnapshot : ModelSnapshot

@@ -6,7 +6,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Infrastructure.API.Middlewares
+namespace ExpenseTracker.Infrastructure.Repository.API.Middlewares
 {
     public class ExceptionHandler
     {

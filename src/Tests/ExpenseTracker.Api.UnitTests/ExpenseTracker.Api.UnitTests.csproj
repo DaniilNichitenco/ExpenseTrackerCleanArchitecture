@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.16.0" />
+        <PackageReference Include="AutoFixture.AutoMoq" Version="4.16.0" />
+        <PackageReference Include="AutoFixture.Xunit2" Version="4.16.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+        <PackageReference Include="MockQueryable.Moq" Version="5.0.0" />
+        <PackageReference Include="Moq" Version="4.16.1" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="1.3.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\ExpenseTracker.Core.Application\ExpenseTracker.Core.Application.csproj" />
+      <ProjectReference Include="..\..\Web\ExpenseTracker.Web.API\ExpenseTracker.Web.API.csproj" />
+      <ProjectReference Include="..\ExpenseTracker.Api.TestsCommon\ExpenseTracker.Api.TestsCommon.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="JetBrains.ReSharper.TestRunner.Abstractions, Version=1.2.7.0, Culture=neutral, PublicKeyToken=5c492ec4f3eccde3">
+        <HintPath>..\..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.3.4\lib\ReSharperHost\TestRunner\netcoreapp2.0\JetBrains.ReSharper.TestRunner.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="JetBrains.ReSharper.TestRunner.Adapters.XUnit, Version=1.2.7.23, Culture=neutral, PublicKeyToken=5c492ec4f3eccde3">
+        <HintPath>..\..\..\..\..\..\..\..\Program Files\JetBrains\JetBrains Rider 2020.3.4\lib\ReSharperHost\TestRunner\Adapters\XUnit\netstandard2.0\JetBrains.ReSharper.TestRunner.Adapters.XUnit.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

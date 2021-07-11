@@ -6,7 +6,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Domain\ExpenseTracker.Core.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Builders\**" />
   </ItemGroup>
 
 </Project>

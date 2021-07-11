@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace ExpenseTracker.Web.API.Controllers
 {
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class WalletsController : ControllerBase
     {

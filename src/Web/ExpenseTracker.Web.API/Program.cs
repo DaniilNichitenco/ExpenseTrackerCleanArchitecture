@@ -1,4 +1,4 @@
-using ExpenseTracker.Infrastructure.API.Extensions;
+using ExpenseTracker.Infrastructure.Repository.API.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;

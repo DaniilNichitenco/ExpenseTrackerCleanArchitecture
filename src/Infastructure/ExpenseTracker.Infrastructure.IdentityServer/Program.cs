@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer
 {
     class Program
     {

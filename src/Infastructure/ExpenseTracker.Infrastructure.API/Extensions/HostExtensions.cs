@@ -1,6 +1,5 @@
 ﻿using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Domain.Entities;
-using ExpenseTracker.Infrastructure.API.API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,8 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExpenseTracker.Infrastructure.Repository.API.API;
 
-namespace ExpenseTracker.Infrastructure.API.Extensions
+namespace ExpenseTracker.Infrastructure.Repository.API.Extensions
 {
     public static class HostExtensions
     {
@@ -22,9 +22,9 @@ namespace ExpenseTracker.Infrastructure.API.Extensions
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var topicRepository = services.GetRequiredService<IEFRepository<Topic>>();
-                    var walletRepository = services.GetRequiredService<IEFRepository<Wallet>>();
-                    var expenseRepository = services.GetRequiredService<IEFRepository<Expense>>();
+                    var topicRepository = services.GetRequiredService<IGenericRepository<Topic>>();
+                    var walletRepository = services.GetRequiredService<IGenericRepository<Wallet>>();
+                    var expenseRepository = services.GetRequiredService<IGenericRepository<Expense>>();
 
                     var context = services.GetRequiredService<ExpenseTrackerDbContext>();
 

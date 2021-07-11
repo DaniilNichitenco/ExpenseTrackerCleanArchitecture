@@ -1,13 +1,13 @@
 ﻿using ExpenseTracker.Core.Domain.Entities;
-using ExpenseTracker.Infrastructure.API.EFConfiguration;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExpenseTracker.Infrastructure.Repository.API.EFConfiguration;
 
-namespace ExpenseTracker.Infrastructure.API
+namespace ExpenseTracker.Infrastructure.Repository.API
 {
     public class ExpenseTrackerDbContext : DbContext
     {

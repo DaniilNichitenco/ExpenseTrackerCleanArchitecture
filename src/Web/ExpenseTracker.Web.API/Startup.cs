@@ -1,23 +1,34 @@
 using ExpenseTracker.Core.Application.Interfaces;
-using ExpenseTracker.Infrastructure.API;
-using ExpenseTracker.Infrastructure.API.Authorization.Handlers;
-using ExpenseTracker.Infrastructure.API.Extensions;
-using ExpenseTracker.Infrastructure.IdentityServer.Extensions;
+using ExpenseTracker.Infrastructure.Repository.API;
+using ExpenseTracker.Infrastructure.Repository.API.Authorization.Handlers;
+using ExpenseTracker.Infrastructure.Repository.API.Extensions;
+using ExpenseTracker.Infrastructure.Repository.IdentityServer.Extensions;
+using ExpenseTracker.Infrastructure.Repository.Shared;
 using IdentityModel.Client;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Reflection;
+using ExpenseTracker.Core.Application;
+using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
+using ExpenseTracker.Core.Application.QueryableBuilders;
+using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
+using ExpenseTracker.Core.Domain.AutoMapperProfiles;
+using ExpenseTracker.Infrastructure.Repository.Shared.SignalR;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ExpenseTracker.Web.API
 {
@@ -52,13 +63,33 @@ namespace ExpenseTracker.Web.API
                 options.AddAuthorizationPolicies();
             });
 
-            services.AddScoped(typeof(IEFRepository<>), typeof(EFRepository<>));
+            services.Configure<EmailSettings>(Configuration.GetSection(nameof(EmailSettings)))
+                //.AddScoped<IEmailSettings, EmailSettings>();
+                .AddScoped<IEmailSettings>(sp =>
+                sp.GetRequiredService<IOptionsMonitor<EmailSettings>>().CurrentValue);
+
+            services.AddHttpContextAccessor();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly(), typeof(ExpenseProfile).GetTypeInfo().Assembly,
+                typeof(Infrastructure.API.AutoMapperProfiles.ExpenseProfile).GetTypeInfo().Assembly);
+            services.AddScoped<ISendingManager, SendingManager>();
+
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<ExpensesBuilder>();
+            services.AddSingleton<ITagReplacer, MailTagReplacer>();
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
+            //services.AddSingleton<TelemetryClient>();
             services.AddSingleton<IDiscoveryCache>(s =>
             {
                 var factory = s.GetRequiredService<IHttpClientFactory>();
                 return new DiscoveryCache(Configuration["ApiResourceBaseUrls:AuthServer"], () => factory.CreateClient());
             });
+            
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddSignalR();
+            
+            services.AddMediatR(typeof(GetUserExpensesQueryHandler),typeof(GetUserExpensesQuery));
 
             services.AddControllers(options =>
             {
@@ -117,7 +148,7 @@ namespace ExpenseTracker.Web.API
 
             app.UseRouting();
 
-            app.AddExceptionHandlerMiddleware();
+            //app.AddExceptionHandlerMiddleware();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -125,6 +156,7 @@ namespace ExpenseTracker.Web.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChartHub>("/chartHub");
             });
         }
     }

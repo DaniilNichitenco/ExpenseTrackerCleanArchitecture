@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExpenseTracker.Infrastructure.API.API
+namespace ExpenseTracker.Infrastructure.Repository.API.API
 {
     class Program
     {

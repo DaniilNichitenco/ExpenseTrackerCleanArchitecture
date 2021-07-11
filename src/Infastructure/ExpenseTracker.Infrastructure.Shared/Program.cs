@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExpenseTracker.Infrastructure.Shared
+namespace ExpenseTracker.Infrastructure.Repository.Shared
 {
     class Program
     {

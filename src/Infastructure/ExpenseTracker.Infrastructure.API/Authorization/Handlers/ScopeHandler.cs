@@ -1,10 +1,10 @@
-﻿using ExpenseTracker.Infrastructure.API.Authorization.Requirements;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Infrastructure.Repository.API.Authorization.Requirements;
 
-namespace ExpenseTracker.Infrastructure.API.Authorization.Handlers
+namespace ExpenseTracker.Infrastructure.Repository.API.Authorization.Handlers
 {
     public class ScopeHandler : AuthorizationHandler<ScopeRequirement>
     {
@@ -12,16 +12,12 @@ namespace ExpenseTracker.Infrastructure.API.Authorization.Handlers
         {
 
             var claims = context.User.Claims.Where(c => c.Type == "scope");
-            if(claims.Count() == 0)
+            if(!claims.Any())
             {
                 return Task.CompletedTask;
             }
 
-            var scopes = new List<string>();
-            foreach(var c in claims)
-            {
-                scopes.Add(c.Value);
-            }
+            var scopes = claims.Select(c => c.Value).ToList();
 
             if (requirement.RequireAll)
             {

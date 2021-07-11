@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace ExpenseTracker.Infrastructure.IdentityServer.Migrations.ConfigurationDb
+namespace ExpenseTracker.Infrastructure.Repository.IdentityServer.Migrations.ConfigurationDb
 {
     [DbContext(typeof(ConfigurationDbContext))]
     [Migration("20210324102947_InitialMigration")]
