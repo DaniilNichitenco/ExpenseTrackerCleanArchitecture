@@ -15,4 +15,16 @@
     <ProjectReference Include="..\Domain\ExpenseTracker.Core.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Builders\**" />
+  </ItemGroup>
+
 </Project>
