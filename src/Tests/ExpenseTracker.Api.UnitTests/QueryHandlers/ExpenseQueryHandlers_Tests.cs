@@ -7,6 +7,7 @@ using ExpenseTracker.Api.TestsCommon.Data;
 using ExpenseTracker.Api.UnitTests.ClassTestData;
 using ExpenseTracker.Core.Application.Interfaces;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
+using ExpenseTracker.Core.Application.QueryableBuilders;
 using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
 using ExpenseTracker.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
     public class ExpenseQueryHandlers_Tests : CommonBaseTestClassFixture
     {
         private readonly Mock<IGenericRepository<Expense>> _expenseRepository;
+        private readonly Mock<ExpensesBuilder> _expensesBuilder;
         private readonly GetUserExpensesQueryHandler _getUserExpensesQueryHandler;
         private readonly GetExpensesSumForDayQueryHandler _getExpensesSumForDayQueryHandler;
         private readonly GetExpensesSumForMonthQueryHandler _getExpensesSumForMonthQueryHandler;
@@ -28,12 +30,14 @@ namespace ExpenseTracker.Api.UnitTests.QueryHandlers
         public ExpenseQueryHandlers_Tests()
         {
             _expenseRepository = new Mock<IGenericRepository<Expense>>();
+            _expensesBuilder = new Mock<ExpensesBuilder>();
             _getUserExpensesQueryHandler = new GetUserExpensesQueryHandler(_expenseRepository.Object, _mapper);
-            _getExpensesSumForDayQueryHandler = new GetExpensesSumForDayQueryHandler(_expenseRepository.Object);
+            _getExpensesSumForDayQueryHandler = new GetExpensesSumForDayQueryHandler(_expenseRepository.Object, _expensesBuilder.Object);
             _getExpensesSumForMonthQueryHandler =
-                new GetExpensesSumForMonthQueryHandler(_expenseRepository.Object);
-            _getExpensesSumForYearQueryHandler = new GetExpensesSumForYearQueryHandler(_expenseRepository.Object);
-            _getExpensesSumPerDayForMonthHandler = new GetExpensesSumPerDayForMonthHandler(_expenseRepository.Object);
+                new GetExpensesSumForMonthQueryHandler(_expenseRepository.Object, _expensesBuilder.Object);
+            _getExpensesSumForYearQueryHandler = new GetExpensesSumForYearQueryHandler(_expenseRepository.Object, _expensesBuilder.Object);
+            _getExpensesSumPerDayForMonthHandler =
+                new GetExpensesSumPerDayForMonthHandler(_expenseRepository.Object, _expensesBuilder.Object);
 
             var expenses = ExpenseData.GetExpenses();
 

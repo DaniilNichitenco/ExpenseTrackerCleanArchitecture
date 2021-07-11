@@ -22,6 +22,7 @@ using System.Net.Http;
 using System.Reflection;
 using ExpenseTracker.Core.Application;
 using ExpenseTracker.Core.Application.Queries.ExpenseQueries;
+using ExpenseTracker.Core.Application.QueryableBuilders;
 using ExpenseTracker.Core.Application.QueryHandlers.Expenses;
 using ExpenseTracker.Core.Domain.AutoMapperProfiles;
 using ExpenseTracker.Infrastructure.Repository.Shared.SignalR;
@@ -73,6 +74,7 @@ namespace ExpenseTracker.Web.API
             services.AddScoped<ISendingManager, SendingManager>();
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<ExpensesBuilder>();
             services.AddSingleton<ITagReplacer, MailTagReplacer>();
             services.AddSingleton<IAuthorizationHandler, ScopeHandler>();
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
